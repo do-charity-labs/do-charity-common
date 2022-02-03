@@ -1,0 +1,44 @@
+plugins {
+    id 'org.springframework.boot' version '2.7.0-M1'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'com.netflix.dgs.codegen' version '5.1.16'
+}
+
+group = 'labs.do.charity'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.spring.io/milestone' }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-neo4j'
+
+    implementation(platform("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:latest.release"))
+    implementation "com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter"
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+tasks.named('generateJava') {
+    schemaPaths = ["${projectDir}/src/main/resources/schema"] // List of directories containing schema files
+    packageName = 'labs.docharity.common.schema' // The package name to use to generate sources
+    generateClient = true // Enable generating the type safe query API
+}

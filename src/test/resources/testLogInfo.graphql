@@ -1,0 +1,6 @@
+mutation {
+    logInfo(s: "log this")
+    createShow(title: "Some Title", releaseYear: 2022) {
+        title
+    }
+}
